@@ -35,10 +35,10 @@ registerFont(otfFontPath, { family: 'Regular' });
 
 // /prodimage?img=https://ae01.alicdn.com/kf/Hf75336cbf1d64ebf9e0e57db12f06d13t/Torx-Cross-Pentalobe-Android.jpg&titel=123&normal=10.00&points=20.00&superd=30.00&limited=40.00&shipping=50.00&shippingcomp=AliExpress Standard Shipping&shippingest=60-20&store=Factory Direct Collected Store
 app.get('/prodimage', async (req, res) => {
-    const { titel, normal, points, superd, limited, shipping, shippingcomp, shippingest, store } = req.query;
+    const { img, titel, normal, points, superd, limited, shipping, shippingcomp, shippingest, store } = req.query;
     try {
         
-        const squareImagePath = 'https://ae01.alicdn.com/kf/Hf75336cbf1d64ebf9e0e57db12f06d13t/Torx-Cross-Pentalobe-Android.jpg';
+        const squareImagePath = img;
         const squareImage = loadImage(squareImagePath);
         
         const backgroundImagePath = 'back.png';
@@ -103,7 +103,7 @@ Promise.all([squareImage, backgroundImage]).then(([squareImg, backgroundImg]) =>
         { text: `$${points}`, x: 302, y: 504 , size: 90, color: 'white'}, // points
         { text: `$${superd}`, x: 278, y: 633 , size: 90, color: 'white'}, // superd
         { text: `$${limited}`, x: 313, y: 763 , size: 90, color: 'white'}, // limited
-        { text: `الشحن ${shipping}$`, x: 1544, y: 888 , size: 50, color: 'white'}, // shipping
+        { text: `الشحن ${shipping}`, x: 1544, y: 888 , size: 50, color: 'white'}, // shipping
         { text: `مع ${shippingcomp}`, x: 1544, y: 950 , size: 50, color: 'white'}, // shippingComp
         { text: `يتوقع الوصول خلال ${shippingest} يوم`, x: 1544, y: 1015 , size: 50, color: 'white'}, // shippingEst
         //{ text: '$30.00', x: 1190, y: 130 }, // stars
