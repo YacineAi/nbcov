@@ -2,33 +2,7 @@ const express = require('express');
 const app = express();
 const { createCanvas, loadImage, registerFont } = require('canvas');
 
-function resizeImage(image, width, height) {
-    const canvas = createCanvas(width, height);
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(image, 0, 0, width, height);
-    return canvas;
-}
 
-function wrapText(text, font, maxWidth) {
-    const words = text.split(' ');
-    const lines = [];
-    let currentLine = words[0];
-
-    for (let i = 1; i < words.length; i++) {
-        const word = words[i];
-        const width = ctx.measureText(currentLine + ' ' + word).width;
-
-        if (width <= maxWidth) {
-            currentLine += ' ' + word;
-        } else {
-            lines.push(currentLine);
-            currentLine = word;
-        }
-    }
-
-    lines.push(currentLine);
-    return lines;
-}
 
 const otfFontPath = 'ara.otf';
 registerFont(otfFontPath, { family: 'Regular' });
@@ -86,7 +60,7 @@ Promise.all([squareImage, backgroundImage]).then(([squareImg, backgroundImg]) =>
     ctx.textBaseline = 'middle';
     ctx.direction = 'rtl';
 
-    const lines = wrapText(rtlText, ctx.font, maxWidth);
+    const lines = wrapText(rtlText, ctx, ctx.font, maxWidth);
     const lineHeight = parseInt(font, 10);
 
     const textX = 1190;
@@ -131,6 +105,34 @@ Promise.all([squareImage, backgroundImage]).then(([squareImg, backgroundImg]) =>
         res.status(500).send('Internal Server Error');
     }
 });
+
+function resizeImage(image, width, height) {
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0, width, height);
+    return canvas;
+}
+
+function wrapText(text, ctx, font, maxWidth) {
+    const words = text.split(' ');
+    const lines = [];
+    let currentLine = words[0];
+
+    for (let i = 1; i < words.length; i++) {
+        const word = words[i];
+        const width = ctx.measureText(currentLine + ' ' + word).width;
+
+        if (width <= maxWidth) {
+            currentLine += ' ' + word;
+        } else {
+            lines.push(currentLine);
+            currentLine = word;
+        }
+    }
+
+    lines.push(currentLine);
+    return lines;
+}
 
 app.listen(3000, () => {
     console.log(`Server is running at 3000`);
