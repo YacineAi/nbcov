@@ -95,10 +95,9 @@ Promise.all([squareImage, backgroundImage]).then(([squareImg, backgroundImg]) =>
     });
 
     const resultDataUrl = canvas.toDataURL('image/jpeg');
-        res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Content-Length': resultDataUrl.length });
-
-        const resultBuffer = Buffer.from(resultDataUrl.split(',')[1], 'base64');
-        res.end(resultBuffer);
+    const resultBuffer = Buffer.from(resultDataUrl.split(',')[1], 'base64');
+    
+    res.status(200).contentType('image/jpeg').send(resultBuffer);
 });
     } catch (error) {
         console.error('Error generating image:', error);
